@@ -1,42 +1,55 @@
 //add items
-let cart = []
+let cart = [];
 
-function addItems(){
-    let name = prompt("items name")
-    let price = parseFloat(prompt("price of the item"))
-    if(!isNaN(price) && price > 0){
-        cart.push({name, price})
-        console.log(`${name} has been  added to the cart at $${price.toFixed(2)}`)
-    }else{
-        console.log("invalid input")
-    }
-}
-//view items here we will use for each
-function viewTheCart(){
-    if(cart.length === 0){
-        console.log("cart is empty")
-    }else{
-        console.log("items in the cart")
-        cart.forEach((index, item) =>{
-            console.log(`${index + 1}. ${item.name} - $${item.price.toFix(2)} `)
-        })
+document.getElementById("add-item-btn").addEventListener("click", addItems);
+document.getElementById("view-cart-btn").addEventListener("click", viewTheCart);
+document.getElementById("total-btn").addEventListener("click", calculateTotal);
+
+function addItems() {
+    let name = prompt("Enter the item's name:");
+    let price = parseFloat(prompt("Enter the price of the item:"));
+    if (!isNaN(price) && price > 0) {
+        cart.push({ name, price });
+        alert(`${name} has been added to the cart at $${price.toFixed(2)}.`);
+    } else {
+        alert("Invalid input. Please enter aH valid price.");
     }
 }
 
-//calculate the total price here we will use reduce method
-function calculateTotal(){
-    let total = cart.reduce((sum, item)=> sum + item.price, 0)
-    console.log(`Total  $${total.toFixed(2)}`)
+// View items in the cart
+function viewTheCart() {
+    const cartDiv = document.getElementById("cart-items");
+    cartDiv.innerHTML = ""; // Clear previous content
+
+    if (cart.length === 0) {
+        cartDiv.textContent = "The cart is empty.";
+    } else {
+        cart.forEach((item, index) => {
+            const itemDiv = document.createElement("div");
+            itemDiv.textContent = `${index + 1}. ${item.name} - $${item.price.toFixed(2)}`;
+            cartDiv.appendChild(itemDiv);
+        });
+    }
 }
-  //filter expensive itemes
-function filterExpensiveItems (threshold){
-    let expensiveItems = cart.filter(item => item.price > threshold)
-    if(expensiveItems.length > threshold){
-        console.log(`${item} is expensive`)
-        expensiveItems.forEach(item =>
-            console.log(`${item.name} - $${item.price.toFixed(2)}`)
-        )   
-    }else{
-        console.log(`no items are expensive than $${threshold.toFixed(2)}`)
+
+// Calculate the total price
+function calculateTotal() {
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const cartDiv = document.getElementById("cart-total");
+    cartDiv.innerHTML = `Total: $${total.toFixed(2)}`;
+}
+
+// Filter expensive items
+function filterExpensiveItems(threshold) {
+    let expensiveItems = cart.filter(item => item.price > threshold);
+
+    if (expensiveItems.length > 0) {
+        let message = "Expensive items:\n";
+        expensiveItems.forEach(item => {
+            message += `${item.name} - $${item.price.toFixed(2)}\n`;
+        });
+        alert(message);
+    } else {
+        alert(`No items are more expensive than $${threshold.toFixed(2)}.`);
     }
 }
